@@ -107,6 +107,24 @@ resource "aws_route_table_association" "stg_vpc_k8s_sn_2_rtt_ass" {
   subnet_id = aws_subnet.stg_vpc_k8s_sn_2.id
   route_table_id = aws_route_table.stg_vpc_rtt_pub.id
 }
+
+resource "aws_subnet" "stg_vpc_k8s_sn_3" {
+  depends_on = [aws_vpc.stg_vpc]
+  vpc_id = aws_vpc.stg_vpc.id
+  cidr_block = var.vpc_sn_conf["k8s_sn_3"]["cidr"]
+  availability_zone = var.vpc_sn_conf["k8s_sn_3"]["az"]
+  tags = {
+    Name = "STG-VPC-K8S-SN-3"
+    Environment = "STG"
+    Region = "us-west-2"
+    Product = "CRM"
+  }
+}
+resource "aws_route_table_association" "stg_vpc_k8s_sn_3_rtt_ass" {
+  depends_on = [aws_vpc.stg_vpc, aws_subnet.stg_vpc_k8s_sn_3, aws_route_table.stg_vpc_rtt_pub]
+  subnet_id = aws_subnet.stg_vpc_k8s_sn_3.id
+  route_table_id = aws_route_table.stg_vpc_rtt_pub.id
+}
 resource "aws_security_group" "stg_vpc_k8s_sg" {
   depends_on = [aws_vpc.stg_vpc]
   vpc_id = aws_vpc.stg_vpc.id
@@ -196,6 +214,33 @@ resource "aws_instance" "stg_ec2_k8s_wkr_1" {
   }
   tags = {
     Name = "STG-EC2-K8S-WKR-1"
+    Environment = "STG"
+    Region = "us-west-2"
+    Product = "CRM"
+  }
+}
+
+resource "aws_instance" "stg_ec2_k8s_wkr_2" {
+  depends_on = [aws_iam_instance_profile.stg_iam_ec2_rl_inst_pf, aws_vpc.stg_vpc, aws_subnet.stg_vpc_k8s_sn_2, aws_security_group.stg_vpc_k8s_sg]
+  ami = var.ec2_ami_conf["k8s"]["id"]
+  availability_zone = var.vpc_sn_conf["k8s_sn_3"]["az"]
+  tenancy = "default"
+  ebs_optimized = false
+  disable_api_termination = false
+  instance_initiated_shutdown_behavior = "stop"
+  instance_type = "t3a.small"
+  key_name = var.stg_ec2_key_pair
+  vpc_security_group_ids = [aws_security_group.stg_vpc_k8s_sg.id]
+  subnet_id = aws_subnet.stg_vpc_k8s_sn_3.id
+  associate_public_ip_address = true
+  private_ip = "10.2.13.10"
+  source_dest_check = false
+  iam_instance_profile = aws_iam_instance_profile.stg_iam_ec2_rl_inst_pf.id
+  credit_specification {
+    cpu_credits = "standard"
+  }
+  tags = {
+    Name = "STG-EC2-K8S-WKR-2"
     Environment = "STG"
     Region = "us-west-2"
     Product = "CRM"
