@@ -1,5 +1,6 @@
 [kubernetes_master]
-stg-ec2-k8s-mtr-1 ansible_host=10.2.11.10 ansible_port=22 ansible_user=ec2-user ansible_become=yes
+stg-ec2-k8s-mtr-1 ansible_host=54.200.235.92 ansible_port=22 ansible_user=ec2-user ansible_become=yes
 
-[kubernetes_worker]
-stg-ec2-k8s-wkr-1 ansible_host=10.2.12.10 ansible_port=22 ansible_user=ec2-user ansible_become=yes
+[kubernetes_workers]
+stg-ec2-k8s-wkr-1 ansible_host=54.184.44.131 ansible_port=22 ansible_user=ec2-user ansible_become=yes
+stg-ec2-k8s-wkr-1 ansible_host=34.221.55.202 ansible_port=22 ansible_user=ec2-user ansible_become=yes

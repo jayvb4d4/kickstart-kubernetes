@@ -69,7 +69,7 @@
 # Download Kubernetes starter-kit from GitHub.
 - name: Download Kubernetes starter-kit from GitHub
   git:
-    repo: https://github.com/sloopstash/kickstart-kubernetes.git
+    repo: https://github.com/jayvb4d4/kickstart-kubernetes.git
     version: master
     dest: "{{kubernetes.starter_kit_dir}}"
     update: yes
@@ -80,7 +80,7 @@
 # Fetch App Git repository.
 - name: Fetch App Git repository
   git:
-    repo: https://github.com/sloopstash/kickstart-flask.git
+    repo: https://github.com/jayvb4d4/kickstart-flask.git
     version: master
     dest: "{{kubernetes.starter_kit_dir}}/app"
     update: yes
